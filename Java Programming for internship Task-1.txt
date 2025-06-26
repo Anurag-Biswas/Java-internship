@@ -1,0 +1,60 @@
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class FileReadWriteModify {
+
+    // Method to write text to a file
+    public static void writeToFile(String filename, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(content);
+            System.out.println("File written successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+    }
+
+    // Method to read text from a file
+    public static void readFromFile(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            System.out.println("File content:");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method to modify text in a file (find and replace)
+    public static void modifyFile(String filename, String toReplace, String replacement) {
+        try {
+            Path path = Paths.get(filename);
+            String content = Files.readString(path);
+            content = content.replace(toReplace, replacement);
+            Files.writeString(path, content);
+            System.out.println("File modified successfully.");
+        } catch (IOException e) {
+            System.out.println("Error modifying file: " + e.getMessage());
+        }
+    }
+
+    // Main method to demonstrate functionality
+    public static void main(String[] args) {
+        String filename = "example.txt";
+        String initialContent = "Hello, this is a sample file.\nThis file is for testing read, write and modify.";
+
+        // Write to file
+        writeToFile(filename, initialContent);
+
+        // Read from file
+        readFromFile(filename);
+
+        // Modify file content (replace "file" with "document")
+        modifyFile(filename, "file", "document");
+
+        // Read again to verify modification
+        readFromFile(filename);
+    }
+}
